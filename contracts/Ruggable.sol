@@ -12,7 +12,7 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
-    uint256 private mintedSoFar;
+    uint256 public constant maxAmount = 50;
 
     constructor() ERC721("OrdinaryNFT", "ONT") {}
 
@@ -25,10 +25,9 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     function purchase() external payable returns (uint256) {
         // has to be minted
-        require(mintedSoFar < _tokenIdCounter.current());
+        require(maxAmount < _tokenIdCounter.current());
         // then you can buy it
         _purchase(_tokenIdCounter.current());
-        mintedSoFar++;
     }
 
     function _purchase(uint256 nftId) private {
