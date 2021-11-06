@@ -1,0 +1,23 @@
+{
+  "name": "atb-contracts",
+  "version": "1.0.0",
+  "description": "The contracts that will be used in the ATB presentation on Thursday.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx hardhat test"
+  },
+  "author": "Labrys",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.6",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  }
+}
