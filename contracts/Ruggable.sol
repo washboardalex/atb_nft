@@ -18,6 +18,7 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     function safeMint(address to, string memory tokenURI) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
+        require(tokenId < maxAmount, "at capacity");
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, tokenURI);
