@@ -1,9 +1,9 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+pragma solidity 0.8.9;
 
 import "hardhat/console.sol";
 
-contract Greeter {
+contract Rorschach extends ERC721 {
     string private greeting;
 
     constructor(string memory _greeting) {
