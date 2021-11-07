@@ -87,7 +87,7 @@ function App() {
                   setNFTURI(uri);
                 } catch (e) {
                   console.log(e);
-                  setNFTURI("https://placebear.com/300/300");
+                  alert("Something went wrong");
                 } finally {
                   setBuying(false);
                 }

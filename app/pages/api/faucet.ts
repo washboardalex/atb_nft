@@ -2,7 +2,7 @@
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 const key = process.env.PRIVATE_KEY;
-const droplet = ethers.utils.parseEther(process.env.DRIP_RATE);
+const droplet = ethers.utils.parseEther(process.env.DRIP_RATE || "0");
 
 export default async function handler(
   req: NextApiRequest,
