@@ -1,7 +1,8 @@
-import { Button, Image, Pane, Spinner, TextInput } from "evergreen-ui";
+import { Button, Image, Pane, Spinner, Text, Heading } from "evergreen-ui";
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import abi from "./abi";
+import axios from "axios";
 
 const nftAddress = "0x957f821cc9074a65caf17023f5a46a15727039c8";
 const getWallet = (key: string) => {
@@ -58,7 +59,16 @@ function App() {
         {loading && <Spinner marginTop="1rem" color="#EF4127" />}
         {!loading && (
           <>
-            <TextInput value={privateKey} disabled marginTop="1rem" />
+            <Heading marginTop="1rem">Your private key</Heading>
+            <Text
+              marginTop="1rem"
+              maxWidth="100%"
+              wordBreak="break-word"
+              fontWeight="bold"
+            >
+              {privateKey}
+            </Text>
+
             <Button
               marginTop="1rem"
               disabled={!!nftURI}
@@ -67,6 +77,7 @@ function App() {
                 const nft = getNFTContract(wallet);
                 setBuying(true);
                 try {
+                  await axios.post("api/faucet", { address: wallet.address });
                   await nft.purchase();
                   const ownedNFT = await nft.tokenOfOwnerByIndex(
                     wallet.address,
