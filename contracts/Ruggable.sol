@@ -29,6 +29,7 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         require(maxAmount < _tokenIdCounter.current());
         // then you can buy it
         _purchase(_tokenIdCounter.current());
+        _tokenIdCounter.increment();
     }
 
     function _purchase(uint256 nftId) private {
