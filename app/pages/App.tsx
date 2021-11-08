@@ -60,7 +60,7 @@ function App() {
           src="https://labrysprod.wpengine.com/wp-content/uploads/2019/03/logo_410x60.png"
           alt="Labrys logo"
         />
-        <Heading size="lg" marginTop="0.5rem">
+        <Heading size={800} marginTop="0.5rem">
           ATB NFT App
         </Heading>
         {loading && <Spinner marginTop="1rem" color="#EF4127" />}
