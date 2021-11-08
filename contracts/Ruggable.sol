@@ -9,32 +9,27 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
-    uint256 public constant PRICE = 3 ether;
 
     Counters.Counter private _tokenIdCounter;
+
+    uint256 public constant maxAmount = 50;
 
     constructor() ERC721("OrdinaryNFT", "ONT") {}
 
     function safeMint(address to, string memory tokenURI) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
+        require(tokenId < maxAmount, "at capacity");
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, tokenURI);
     }
 
-
-    function purchase(uint256 nftId) external payable returns (uint256) {
+    function purchase() external payable {
         // has to be minted
-        require(nftId < _tokenIdCounter.current());
-        // have to pay enough
-        require(
-            msg.value >= PRICE,
-            "value less than price of nft"
-        );
-        // has to not already be purchased
-        require(ownerOf(nftId) == address(this));
+        require(maxAmount < _tokenIdCounter.current());
         // then you can buy it
-        _purchase(nftId);
+        _purchase(_tokenIdCounter.current());
+        _tokenIdCounter.increment();
     }
 
     function _purchase(uint256 nftId) private {
@@ -44,10 +39,11 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     // The following functions are overrides required by Solidity.
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
@@ -60,7 +56,10 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721, ERC721URIStorage)
+    {
         super._burn(tokenId);
     }
 
