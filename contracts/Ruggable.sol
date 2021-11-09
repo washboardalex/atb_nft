@@ -17,12 +17,12 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     constructor() ERC721("OrdinaryNFT", "ONT") {}
 
-    function safeMint(address to, string memory tokenURI) public onlyOwner {
+    function safeMint(address to, string memory _tokenURI) public onlyOwner {
         _tokenIdCounter.increment();
         uint256 tokenId = _tokenIdCounter.current();
         require(tokenId < maxAmount, "at capacity");
         _mint(to, tokenId);
-        _setTokenURI(tokenId, tokenURI);
+        _setTokenURI(tokenId, _tokenURI);
     }
 
     function purchase() external payable {
@@ -34,7 +34,6 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     function _purchase(uint256 nftId) private {
-        address payable buyer = payable(msg.sender);
         _transfer(address(this), msg.sender, nftId);
     }
 
