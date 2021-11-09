@@ -24,7 +24,23 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     log: true,
   });
 
+  const NFTContract = new ethers.Contract(
+    OrdinaryNFT.address,
+    ["function batchMint(address to, string[] memory _tokenURI)"],
+    wallet
+  ) as OrdinaryNFT;
+
   console.log(`OrdinaryNFT deployed to: ${OrdinaryNFT.address}`);
+
+  const nfts = [];
+  for (let i = 0; i < 25; i++) {
+    nfts.push(
+      "https://storage.cloud.google.com/atb_presentation_nfts/neuron_activation.png"
+    );
+  }
+
+  const tx = await NFTContract.batchMint(NFTContract.address, nfts); // Add urls to the array, each will become an nft
+  const receipt = await tx.wait();
 };
 
 export default func;
