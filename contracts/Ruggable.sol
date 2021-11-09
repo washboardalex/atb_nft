@@ -13,28 +13,29 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     Counters.Counter private _tokenIdCounter;
 
     uint256 public constant maxAmount = 50;
+    uint256 public currentAmount = 1;
 
     constructor() ERC721("OrdinaryNFT", "ONT") {}
 
     function safeMint(address to, string memory tokenURI) public onlyOwner {
+        _tokenIdCounter.increment();
         uint256 tokenId = _tokenIdCounter.current();
         require(tokenId < maxAmount, "at capacity");
-        _tokenIdCounter.increment();
-        _safeMint(to, tokenId);
+        _mint(to, tokenId);
         _setTokenURI(tokenId, tokenURI);
     }
 
     function purchase() external payable {
         // has to be minted
-        require(maxAmount < _tokenIdCounter.current());
+        require(currentAmount <= maxAmount, "no more nfts");
         // then you can buy it
-        _purchase(_tokenIdCounter.current());
-        _tokenIdCounter.increment();
+        _purchase(currentAmount);
+        currentAmount++;
     }
 
     function _purchase(uint256 nftId) private {
         address payable buyer = payable(msg.sender);
-        ERC721(address(this)).transferFrom(address(this), buyer, nftId);
+        _transfer(address(this), msg.sender, nftId);
     }
 
     // The following functions are overrides required by Solidity.
