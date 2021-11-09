@@ -21,7 +21,7 @@ async function main() {
 
   console.log("NFT deployed to:", nft.address);
 
-  await nft.batchMint(nft.address, []);
+  await nft.batchMint(nft.address, []); // Add urls to the array, each will become an nft
 }
 
 // We recommend this pattern to be able to use async/await everywhere
