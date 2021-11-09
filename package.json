@@ -4,7 +4,9 @@
   "description": "The contracts that will be used in the ATB presentation on Thursday.",
   "main": "index.js",
   "scripts": {
-    "test": "npx hardhat test"
+    "test": "npx hardhat test",
+    "deploy:mumbai": "npx hardhat --network mumbai_testnet deploy --show-stack-traces",
+    "deploy:polygon": "npx hardhat --network polygon deploy --show-stack-traces"
   },
   "author": "Labrys",
   "license": "ISC",
@@ -17,11 +19,15 @@
     "chai": "^4.3.4",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.1",
-    "hardhat": "^2.6.8",
+    "hardhat": "^2.6.2",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.3.2"
+    "@openzeppelin/contracts": "^4.3.2",
+    "@typechain/ethers-v5": "^8.0.2",
+    "@typechain/hardhat": "^3.0.0",
+    "dotenv": "^10.0.0",
+    "hardhat-deploy": "^0.9.5"
   }
 }
