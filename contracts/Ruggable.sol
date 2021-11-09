@@ -25,6 +25,16 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         _setTokenURI(tokenId, _tokenURI);
     }
 
+    function batchMint(address to, string[] memory _tokenURI) public onlyOwner {
+        for (uint256 i = 0; i < _tokenURI.length; i++) {
+            _tokenIdCounter.increment();
+            uint256 tokenId = _tokenIdCounter.current();
+            require(tokenId < maxAmount, "at capacity");
+            _mint(to, tokenId);
+            _setTokenURI(tokenId, _tokenURI[i]);
+        }
+    }
+
     function purchase() external payable {
         // has to be minted
         require(currentAmount <= maxAmount, "no more nfts");
