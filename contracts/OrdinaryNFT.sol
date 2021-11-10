@@ -12,7 +12,7 @@ contract OrdinaryNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
-    uint256 public constant maxAmount = 50;
+    uint256 public constant maxAmount = 100;
     uint256 public currentAmount = 1;
 
     constructor() ERC721("OrdinaryNFT", "ONT") {}
