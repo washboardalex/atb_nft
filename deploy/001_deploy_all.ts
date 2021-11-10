@@ -5,11 +5,13 @@ import { ethers } from "hardhat";
 import { OrdinaryNFT } from "../typechain-types";
 require("dotenv").config();
 
+const ALCHEMY_KEY = process.env.ALCHEMY_KEY_POLYGON;
+
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, network } = hre;
   console.log(process.env.MNEMONIC);
   const provider = new ethers.providers.JsonRpcProvider(
-    "https://rpc-mumbai.maticvigil.com/"
+    `https://polygon-mainnet.g.alchemyapi.io/v2/${ALCHEMY_KEY}`
   );
 
   const hdWallet = ethers.Wallet.fromMnemonic(process.env.MNEMONIC!);
