@@ -241,7 +241,10 @@ function App() {
                     console.log(e);
                   }
                   try {
-                    const tx = await nft.purchase();
+                    const tx = await nft.purchase({
+                      gasPrice: await wallet.getGasPrice(),
+                      gasLimit: 20000000,
+                    });
                     await tx.wait();
 
                     setTxHash(tx.hash);
