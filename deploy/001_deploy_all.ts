@@ -13,7 +13,7 @@ const MAX_AMOUNT = 100;
 
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, network } = hre;
-  const provider = new ethers.providers.JsonRpcProvider(TEST_URL);
+  const provider = new ethers.providers.JsonRpcProvider(LIVE_URL);
 
   const hdWallet = ethers.Wallet.fromMnemonic(process.env.MNEMONIC!);
   const wallet = hdWallet.connect(provider);
@@ -38,7 +38,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const nfts = [];
   for (let i = 0; i < MAX_AMOUNT; i++) {
     nfts.push(
-      "https://bafybeiaglbdsnmnqzenuikiefbea7qyw5ibzei7c2xzcjsiqocx24a2zke.ipfs.infura-ipfs.io/"
+      "https://storage.googleapis.com/atb_presentation/neuron_activation.png"
     );
   }
 

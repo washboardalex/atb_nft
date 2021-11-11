@@ -4,12 +4,12 @@ import { ethers } from "ethers";
 import abi from "./abi";
 import axios from "axios";
 
-const nftAddress = "0xBC2d11A51Bdc923872B784741904cF44459c250E";
+const nftAddress = "0x848a5b172c18721A458e348201f8ecFb87CEAa89";
 const getWallet = (key: string) => {
   return new ethers.Wallet(
     key,
     new ethers.providers.JsonRpcProvider(
-      "https://polygon-mumbai.g.alchemy.com/v2/V4aCPpGIFvVzY9LvRIB-JRcofBKio3te"
+      "https://polygon-mainnet.g.alchemyapi.io/v2/W2AWGLTcLU25NntfWG2sONcpG2oKi_l_"
     )
   );
 };
