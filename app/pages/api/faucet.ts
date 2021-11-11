@@ -16,7 +16,7 @@ export default async function handler(
     const wallet = new ethers.Wallet(
       key,
       new ethers.providers.JsonRpcProvider(
-        "https://polygon-mumbai.g.alchemy.com/v2/V4aCPpGIFvVzY9LvRIB-JRcofBKio3te"
+        "https://polygon-mainnet.g.alchemyapi.io/v2/W2AWGLTcLU25NntfWG2sONcpG2oKi_l_"
       )
     );
 
