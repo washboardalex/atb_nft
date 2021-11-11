@@ -6,6 +6,7 @@ import { OrdinaryNFT } from "../typechain-types";
 require("dotenv").config();
 
 const ALCHEMY_KEY = process.env.ALCHEMY_KEY_POLYGON;
+const MAX_AMOUNT = 100;
 
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, network } = hre;
@@ -35,9 +36,9 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   console.log(`OrdinaryNFT deployed to: ${OrdinaryNFT.address}`);
 
   const nfts = [];
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < MAX_AMOUNT; i++) {
     nfts.push(
-      "https://storage.cloud.google.com/atb_presentation_nfts/neuron_activation.png"
+      "https://storage.googleapis.com/atb_presentation/neuron_activation.png"
     );
   }
 
