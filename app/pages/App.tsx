@@ -143,7 +143,7 @@ function App() {
           </Box>
         </Flex>
         <Heading marginTop="0.5rem" size="2xl">
-          Actual Title
+          Neuron Activation NFT Giveaway
         </Heading>
         <Heading marginY="0.5rem" size="xl">
           ATB NFT Demo
