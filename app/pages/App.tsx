@@ -11,13 +11,15 @@ import {
   useDisclosure,
   useClipboard,
   useColorMode,
+  Link,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import abi from "../abi";
 import axios from "axios";
-import { UnlockIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, UnlockIcon } from "@chakra-ui/icons";
 import { css, Global } from "@emotion/react";
+import QRCode from "qrcode.react";
 
 const nftAddress = "0xBC2d11A51Bdc923872B784741904cF44459c250E";
 const getWallet = (key: string) => {
@@ -38,9 +40,14 @@ function App() {
   const [nftURI, setNFTURI] = useState<string>("");
   const [buyingNFT, setBuying] = useState(false);
 
+  const [address, setAddress] = useState("");
+  const [txHash, setTxHash] = useState("");
+
   useEffect(() => {
     const getNFT = async (key: string) => {
       const wallet = getWallet(key);
+      setAddress(wallet.address);
+
       const nft = getNFTContract(wallet);
       try {
         const ownedNFT = await nft.tokenOfOwnerByIndex(wallet.address, 0);
@@ -74,6 +81,7 @@ function App() {
         styles={css`
           body {
             background-color: ${colorMode === "light" ? "#f6f6f6" : "black"};
+            padding-bottom: 30px;
           }
         `}
       />
@@ -111,9 +119,44 @@ function App() {
               }
             `}
           />
+          <Box
+            css={css`
+              display: none;
+              @media (min-width: 500px) {
+                display: initial;
+                margin-bottom: 20px;
+              }
+            `}
+          >
+            <QRCode
+              value="https://atb-nft.labrys.group/"
+              size={300}
+              bgColor={colorMode === "light" ? "#f6f6f6" : "black"}
+              fgColor={colorMode === "light" ? "black" : "#f6f6f6"}
+            />
+          </Box>
         </Flex>
-        <Heading marginTop="0.5rem">ATB NFT Demo</Heading>
-        <p>Explanation of whats happening here...</p>
+        <Heading marginTop="0.5rem" size="2xl">
+          Actual Title
+        </Heading>
+        <Heading marginY="0.5rem" size="xl">
+          ATB NFT Demo
+        </Heading>
+        <Text marginY="3">
+          The website has generated a Polygon wallet for you, click below to
+          show and save your private key. You can see your address{" "}
+          <Link
+            href={`https://polygonscan.com/address/${address}`}
+            isExternal
+            color="#00FFA7"
+          >
+            here on Polygonscan <ExternalLinkIcon mx="2px" />
+          </Link>
+        </Text>
+        <Text marginY="3">
+          Claiming the NFT will send a transaction to the NFT contract, which
+          will send an NFT to your wallet.
+        </Text>
         {loading && (
           <Flex width="100%" justifyContent="center" marginY="10">
             <Spinner size="xl" color="#00FFA7" />
@@ -137,6 +180,12 @@ function App() {
                 backgroundColor={colorMode === "light" ? "white" : "#838383"}
                 padding="5"
                 flexDir="column"
+                css={css`
+                  align-items: flex-start;
+                  @media (max-width: 500px) {
+                    align-items: initial;
+                  }
+                `}
               >
                 <Heading size="md">Your private key</Heading>
                 <Text>
@@ -146,30 +195,12 @@ function App() {
                 <Flex alignItems="center" mt="1rem">
                   <Text
                     marginTop="1rem"
-                    maxWidth="100%"
+                    maxWidth="90%"
                     wordBreak="break-word"
-                    isTruncated
                     fontWeight="bold"
                   >
                     {privateKey}
                   </Text>
-                  <Button
-                    size="sm"
-                    marginLeft="10px"
-                    variant="outline"
-                    borderRadius="0"
-                    borderColor={colorMode === "light" ? "black" : "#f6f6f6"}
-                    minW="7em"
-                    css={css`
-                      display: none;
-                      @media (min-width: 500px) {
-                        display: initial;
-                      }
-                    `}
-                    onClick={onCopy}
-                  >
-                    {hasCopied ? "Copied" : "Copy"}
-                  </Button>
                 </Flex>
                 <Button
                   size="sm"
@@ -177,12 +208,6 @@ function App() {
                   variant="outline"
                   borderRadius="0"
                   borderColor={colorMode === "light" ? "black" : "#f6f6f6"}
-                  css={css`
-                    display: none;
-                    @media (max-width: 500px) {
-                      display: initial;
-                    }
-                  `}
                   onClick={onCopy}
                 >
                   {hasCopied ? "Copied" : "Copy"}
@@ -208,6 +233,9 @@ function App() {
                   try {
                     const tx = await nft.purchase();
                     await tx.wait();
+
+                    setTxHash(tx.hash);
+
                     const ownedNFT = await nft.tokenOfOwnerByIndex(
                       wallet.address,
                       0
@@ -238,9 +266,13 @@ function App() {
                 <Image
                   src={nftURI}
                   marginTop="1rem"
-                  alt="NFT"
+                  alt="NFT Image"
                   marginBottom="30px"
                 />
+                <Text>Transaction Hash: {txHash} </Text>
+                <Link isExternal color="#00FFA7">
+                  View on Polygonscan <ExternalLinkIcon mx="2px" />
+                </Link>
               </Box>
             )}
           </>
