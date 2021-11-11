@@ -1,21 +1,37 @@
-import { Button, Image, Pane, Spinner, Text, Heading } from "evergreen-ui";
+import {
+  Button,
+  Image,
+  Box,
+  Spinner,
+  Text,
+  Heading,
+  Container,
+  Flex,
+  IconButton,
+  useDisclosure,
+  useClipboard,
+  useColorMode,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import abi from "./abi";
+import abi from "../abi";
 import axios from "axios";
+import { UnlockIcon } from "@chakra-ui/icons";
+import { css, Global } from "@emotion/react";
 
-const nftAddress = "0xBC2d11A51Bdc923872B784741904cF44459c250E";
+const nftAddress = "0x957f821cc9074a65caf17023f5a46a15727039c8";
 const getWallet = (key: string) => {
   return new ethers.Wallet(
     key,
     new ethers.providers.JsonRpcProvider(
-      "https://polygon-mumbai.g.alchemy.com/v2/V4aCPpGIFvVzY9LvRIB-JRcofBKio3te"
+      "https://polygon-mainnet.g.alchemy.com/v2/p6cOz2Sah7mM9TmEJDq4PEmYFGC_YoSO"
     )
   );
 };
-const getNFTContract = (provider: ethers.Signer) => {
-  return new ethers.Contract(nftAddress, abi, provider);
-};
+
+const getNFTContract = (provider: ethers.Signer) =>
+  new ethers.Contract(nftAddress, abi, provider);
+
 function App() {
   const [privateKey, setPrivateKey] = useState("0xPRIVATE_KEY");
   const [loading, setLoading] = useState(true);
@@ -47,81 +63,186 @@ function App() {
     getNFT(key);
   }, []);
 
+  const { onToggle, isOpen } = useDisclosure();
+  const { hasCopied, onCopy } = useClipboard(privateKey);
+
+  const { colorMode } = useColorMode();
+
   return (
     <div className="App">
-      <Pane
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        width="100%"
-        height="100vh"
+      <Global
+        styles={css`
+          body {
+            background-color: ${colorMode === "light" ? "#f6f6f6" : "black"};
+          }
+        `}
+      />
+      <Image
+        src="/Labrys_Logo_masterRGB-01.png"
+        alt="Labrys logo"
+        css={css`
+          height: 8rem;
+          display: none;
+          @media (min-width: 500px) {
+            display: initial;
+          }
+        `}
+      />
+      <Container
+        css={css`
+          padding-top: 20px;
+          @media (max-width: 500px) {
+            display: flex;
+            flex-direction: column;
+          }
+        `}
       >
-        <Image
-          src="https://labrysprod.wpengine.com/wp-content/uploads/2019/03/logo_410x60.png"
-          alt="Labrys logo"
-        />
-        <Heading size={800} marginTop="0.5rem">
-          ATB NFT App
-        </Heading>
-        {loading && <Spinner marginTop="1rem" color="#EF4127" />}
+        <Flex justifyContent="center">
+          <Image
+            maxWidth="80%"
+            src="/Labrys_Logo_masterRGB-01.png"
+            alt="Labrys logo"
+            paddingTop="3em"
+            paddingBottom="2em"
+            css={css`
+              display: none;
+              @media (max-width: 500px) {
+                display: initial;
+              }
+            `}
+          />
+        </Flex>
+        <Heading marginTop="0.5rem">ATB NFT Demo</Heading>
+        <p>Explanation of whats happening here...</p>
+        {loading && (
+          <Flex width="100%" justifyContent="center" marginY="10">
+            <Spinner size="xl" color="#00FFA7" />
+          </Flex>
+        )}
         {!loading && (
           <>
-            <Heading marginTop="1rem">Your private key</Heading>
-            <Text
-              marginTop="1rem"
-              maxWidth="100%"
-              wordBreak="break-word"
-              fontWeight="bold"
-            >
-              {privateKey}
-            </Text>
-
             <Button
-              marginTop="1rem"
-              disabled={!!nftURI}
-              onClick={async () => {
-                const wallet = getWallet(privateKey);
-                const nft = getNFTContract(wallet);
-                setBuying(true);
-                try {
-                  await axios.post("api/faucet", { address: wallet.address });
-                } catch (e) {
-                  console.log(e);
-                }
-                try {
-                  const tx = await nft.purchase();
-                  await tx.wait();
-                  const ownedNFT = await nft.tokenOfOwnerByIndex(
-                    wallet.address,
-                    0
-                  );
-                  const uri: string = await nft.tokenURI(ownedNFT);
-                  setNFTURI(uri);
-                } catch (e) {
-                  console.log(e);
-                  alert("Something went wrong");
-                } finally {
-                  setBuying(false);
-                }
-              }}
+              leftIcon={<UnlockIcon />}
+              variant="outline"
+              borderRadius="0"
+              borderColor={colorMode === "light" ? "black" : "#f6f6f6"}
+              marginY="4"
+              onClick={onToggle}
             >
-              {buyingNFT ? (
-                <>
-                  Processing <Spinner marginLeft="0.5rem" size={12} />
-                </>
-              ) : (
-                "Purchase an NFT"
-              )}
+              {isOpen ? "Hide" : "Show"} private key
             </Button>
+
+            {isOpen && (
+              <Flex
+                backgroundColor={colorMode === "light" ? "white" : "#838383"}
+                padding="5"
+                flexDir="column"
+              >
+                <Heading size="md">Your private key</Heading>
+                <Text>
+                  Copy your private key to import this address into a Polygon
+                  wallet.
+                </Text>
+                <Flex alignItems="center" mt="1rem">
+                  <Text
+                    marginTop="1rem"
+                    maxWidth="100%"
+                    wordBreak="break-word"
+                    isTruncated
+                    fontWeight="bold"
+                  >
+                    {privateKey}
+                  </Text>
+                  <Button
+                    size="sm"
+                    marginLeft="10px"
+                    variant="outline"
+                    borderRadius="0"
+                    borderColor={colorMode === "light" ? "black" : "#f6f6f6"}
+                    minW="7em"
+                    css={css`
+                      display: none;
+                      @media (min-width: 500px) {
+                        display: initial;
+                      }
+                    `}
+                    onClick={onCopy}
+                  >
+                    {hasCopied ? "Copied" : "Copy"}
+                  </Button>
+                </Flex>
+                <Button
+                  size="sm"
+                  marginTop="10px"
+                  variant="outline"
+                  borderRadius="0"
+                  borderColor={colorMode === "light" ? "black" : "#f6f6f6"}
+                  css={css`
+                    display: none;
+                    @media (max-width: 500px) {
+                      display: initial;
+                    }
+                  `}
+                  onClick={onCopy}
+                >
+                  {hasCopied ? "Copied" : "Copy"}
+                </Button>
+              </Flex>
+            )}
+            <br />
+            {!nftURI && (
+              <Button
+                variant="outline"
+                borderRadius="0"
+                borderColor={colorMode === "light" ? "black" : "#f6f6f6"}
+                marginTop="1rem"
+                onClick={async () => {
+                  const wallet = getWallet(privateKey);
+                  const nft = getNFTContract(wallet);
+                  setBuying(true);
+                  try {
+                    await axios.post("api/faucet", {
+                      address: wallet.address,
+                    });
+                    await nft.purchase();
+                    const ownedNFT = await nft.tokenOfOwnerByIndex(
+                      wallet.address,
+                      0
+                    );
+                    const uri: string = await nft.tokenURI(ownedNFT);
+                    setNFTURI(uri);
+                  } catch (e) {
+                    console.log(e);
+                    alert("Something went wrong");
+                  } finally {
+                    setBuying(false);
+                  }
+                }}
+              >
+                {buyingNFT ? (
+                  <>
+                    Processing <Spinner marginLeft="0.5rem" />
+                  </>
+                ) : (
+                  "Claim NFT"
+                )}
+              </Button>
+            )}
+
             {nftURI && (
-              <>
-                <h3>Congratulations, you now own:</h3>
-                <Image src={nftURI} marginTop="1rem" />
-              </>
+              <Box marginTop="2rem">
+                <Heading size="md">Congratulations, you now own</Heading>
+                <Image
+                  src={nftURI}
+                  marginTop="1rem"
+                  alt="NFT"
+                  marginBottom="30px"
+                />
+              </Box>
             )}
           </>
         )}
-      </Pane>
+      </Container>
     </div>
   );
 }

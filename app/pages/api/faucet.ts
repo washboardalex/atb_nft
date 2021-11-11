@@ -16,18 +16,17 @@ export default async function handler(
     const wallet = new ethers.Wallet(
       key,
       new ethers.providers.JsonRpcProvider(
-        "https://polygon-mumbai.g.alchemy.com/v2/V4aCPpGIFvVzY9LvRIB-JRcofBKio3te"
+        "https://polygon-mainnet.g.alchemy.com/v2/p6cOz2Sah7mM9TmEJDq4PEmYFGC_YoSO"
       )
     );
 
     const requesterBalance = await wallet.provider.getBalance(req.body.address);
-    console.log(requesterBalance.toString());
-    if (requesterBalance.eq(0)) {
+
+    if (requesterBalance.eq(0) && (await wallet.getBalance()).gte(droplet)) {
       await wallet.sendTransaction({
         to: req.body.address,
         value: droplet,
       });
-      res.status(200).send("Funded, you filthy capitalist");
     } else {
       res.status(400).send("Faucet's dry, comrade");
     }
