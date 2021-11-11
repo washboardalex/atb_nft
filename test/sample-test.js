@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Greeter", async () => {
+describe("OrdinaryNFT", async () => {
   let nftContract;
   beforeEach(async () => {
     const NFTContract = await ethers.getContractFactory("OrdinaryNFT");
