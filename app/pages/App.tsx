@@ -60,6 +60,7 @@ function App() {
     };
     // Check localstorage
     let key = localStorage.getItem("privateKey");
+    let txHash = localStorage.getItem("txHash");
 
     if (!key) {
       // Generate and save a key
@@ -68,6 +69,9 @@ function App() {
     }
     setPrivateKey(key);
     getNFT(key);
+    if (txHash) {
+      setTxHash(txHash);
+    }
   }, []);
 
   const { onToggle, isOpen } = useDisclosure();
@@ -241,6 +245,7 @@ function App() {
                     await tx.wait();
 
                     setTxHash(tx.hash);
+                    localStorage.setItem("txHash", txHash);
 
                     const ownedNFT = await nft.tokenOfOwnerByIndex(
                       wallet.address,
@@ -276,7 +281,11 @@ function App() {
                   marginBottom="30px"
                 />
                 <Text>Transaction Hash: {txHash} </Text>
-                <Link isExternal color="#00FFA7">
+                <Link
+                  isExternal
+                  href={`https://polygonscan.com/tx/${txHash}`}
+                  color="#00FFA7"
+                >
                   View on Polygonscan <ExternalLinkIcon mx="2px" />
                 </Link>
               </Box>
