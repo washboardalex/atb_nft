@@ -4,12 +4,12 @@ import { ethers } from "ethers";
 import abi from "./abi";
 import axios from "axios";
 
-const nftAddress = "0x957f821cc9074a65caf17023f5a46a15727039c8";
+const nftAddress = "0xBC2d11A51Bdc923872B784741904cF44459c250E";
 const getWallet = (key: string) => {
   return new ethers.Wallet(
     key,
     new ethers.providers.JsonRpcProvider(
-      "https://polygon-mainnet.g.alchemy.com/v2/p6cOz2Sah7mM9TmEJDq4PEmYFGC_YoSO"
+      "https://polygon-mumbai.g.alchemy.com/v2/V4aCPpGIFvVzY9LvRIB-JRcofBKio3te"
     )
   );
 };
@@ -85,7 +85,12 @@ function App() {
                 setBuying(true);
                 try {
                   await axios.post("api/faucet", { address: wallet.address });
-                  await nft.purchase();
+                } catch (e) {
+                  console.log(e);
+                }
+                try {
+                  const tx = await nft.purchase();
+                  await tx.wait();
                   const ownedNFT = await nft.tokenOfOwnerByIndex(
                     wallet.address,
                     0
