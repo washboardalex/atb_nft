@@ -248,7 +248,7 @@ function App() {
                     await tx.wait();
 
                     setTxHash(tx.hash);
-                    localStorage.setItem("txHash", txHash);
+                    localStorage.setItem("txHash", tx.hash);
 
                     const ownedNFT = await nft.tokenOfOwnerByIndex(
                       wallet.address,
