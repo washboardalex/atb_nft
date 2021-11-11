@@ -243,7 +243,7 @@ function App() {
                   try {
                     const tx = await nft.purchase({
                       gasPrice: await wallet.getGasPrice(),
-                      gasLimit: 20000000,
+                      gasLimit: 150000,
                     });
                     await tx.wait();
 
