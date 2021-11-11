@@ -137,8 +137,8 @@ function App() {
             <QRCode
               value="https://atb-nft.labrys.group/"
               size={300}
-              bgColor={colorMode === "light" ? "#f6f6f6" : "black"}
               fgColor={colorMode === "light" ? "black" : "#f6f6f6"}
+              bgColor={colorMode === "light" ? "#f6f6f6" : "black"}
             />
           </Box>
         </Flex>
