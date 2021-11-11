@@ -52,6 +52,7 @@ const config: HardhatUserConfig = {
     mumbai_testnet: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
       accounts: { mnemonic: MNEMONIC },
+      gasPrice: 70000000000,
       chainId: 80001,
       timeout: 100000,
     },
