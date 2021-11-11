@@ -123,11 +123,17 @@ function App() {
             css={css`
               display: none;
               @media (min-width: 500px) {
-                display: initial;
+                display: flex;
                 margin-bottom: 20px;
               }
             `}
+            flexDir="column"
+            justifyContent="center"
+            alignItems="center"
           >
+            <Heading size="xl" mb="3">
+              atb-nft.labrys.group
+            </Heading>
             <QRCode
               value="https://atb-nft.labrys.group/"
               size={300}
